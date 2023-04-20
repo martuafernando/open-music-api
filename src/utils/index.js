@@ -1,19 +1,13 @@
 /* eslint-disable camelcase */
 
-const mapDBToModel = ({
+const mapDBToAlbumsModel = ({
   id,
-  title,
-  body,
-  tags,
-  created_at,
-  updated_at
+  name,
+  year
 }) => ({
   id,
-  title,
-  body,
-  tags,
-  createdAt: created_at,
-  updatedAt: updated_at
+  name,
+  year: parseInt(year)
 })
 
-module.exports = { mapDBToModel }
+module.exports = { mapDBToAlbumsModel }
