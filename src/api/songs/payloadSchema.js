@@ -1,4 +1,4 @@
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 
 const SongPayloadSchema = Joi.object({
   title:
@@ -10,11 +10,11 @@ const SongPayloadSchema = Joi.object({
       .required(),
 
   genre:
-    Joi.number()
+    Joi.string()
       .required(),
 
   performer:
-    Joi.number()
+    Joi.string()
       .required(),
 
   duration:

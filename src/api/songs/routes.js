@@ -1,13 +1,13 @@
-const AlbumPayloadSchema = require('./payloadSchema')
+const SongPayloadSchema = require('./payloadSchema')
 
 const routes = (handler) => [
   {
     method: 'POST',
-    path: '/albums',
-    handler: handler.postAlbum,
+    path: '/songs',
+    handler: handler.postSong,
     options: {
       validate: {
-        payload: AlbumPayloadSchema,
+        payload: SongPayloadSchema,
         failAction: async (request, h, err) => {
           err.output.payload.status = 'fail'
           throw err
@@ -17,16 +17,21 @@ const routes = (handler) => [
   },
   {
     method: 'GET',
-    path: '/albums/{id}',
-    handler: handler.getAlbumById
+    path: '/songs',
+    handler: handler.getAllSong
+  },
+  {
+    method: 'GET',
+    path: '/songs/{id}',
+    handler: handler.getSongById
   },
   {
     method: 'PUT',
-    path: '/albums/{id}',
-    handler: handler.putAlbumById,
+    path: '/songs/{id}',
+    handler: handler.putSongById,
     options: {
       validate: {
-        payload: AlbumPayloadSchema,
+        payload: SongPayloadSchema,
         failAction: async (request, h, err) => {
           err.output.payload.status = 'fail'
           throw err
@@ -36,8 +41,8 @@ const routes = (handler) => [
   },
   {
     method: 'DELETE',
-    path: '/albums/{id}',
-    handler: handler.deleteAlbumById
+    path: '/songs/{id}',
+    handler: handler.deleteSongById
   }
 ]
 
