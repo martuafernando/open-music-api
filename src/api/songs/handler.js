@@ -10,8 +10,7 @@ class SongsHandler {
   }
 
   async postSong (request, h) {
-    const { title, year, genre, performer, duration, albumId } = request.payload
-    const songId = await this._service.addSong({ title, year, genre, performer, duration, albumId })
+    const songId = await this._service.addSong(request.payload)
 
     return h
       .response({
@@ -25,8 +24,7 @@ class SongsHandler {
   }
 
   async getAllSong (request, h) {
-    const {title, performer} = request.query
-    const songs = await this._service.getAllSong({ title, performer })
+    const songs = await this._service.getAllSong(request.query)
     return {
       status: 'success',
       data: {

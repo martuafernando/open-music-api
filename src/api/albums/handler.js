@@ -9,8 +9,7 @@ class AlbumsHandler {
   }
 
   async postAlbum (request, h) {
-    const { name, year } = request.payload
-    const albumId = await this._service.addAlbum({ name, year })
+    const albumId = await this._service.addAlbum(request.payload)
 
     return h
       .response({
