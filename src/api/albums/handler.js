@@ -3,12 +3,6 @@ const autoBind = require('auto-bind')
 class AlbumsHandler {
   constructor (service) {
     this._service = service
-
-    this.postAlbum = this.postAlbum()
-    this.getAlbumById = this.getAlbumByIdpostAlbum()
-    this.putAlbumById = this.putAlbumByIdpostAlbum()
-    this.deleteAlbumById = this.deleteAlbumByIdpostAlbum()
-
     autoBind(this)
   }
 
