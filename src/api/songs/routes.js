@@ -1,13 +1,11 @@
-const SongPayloadSchema = require('./payloadSchema')
-
-const routes = (handler) => [
+const routes = (handler, payloadSchema) => [
   {
     method: 'POST',
     path: '/songs',
     handler: handler.postSong,
     options: {
       validate: {
-        payload: SongPayloadSchema,
+        payload: payloadSchema,
         failAction: async (request, h, err) => {
           err.output.payload.status = 'fail'
           throw err
@@ -31,7 +29,7 @@ const routes = (handler) => [
     handler: handler.putSongById,
     options: {
       validate: {
-        payload: SongPayloadSchema,
+        payload: payloadSchema,
         failAction: async (request, h, err) => {
           err.output.payload.status = 'fail'
           throw err

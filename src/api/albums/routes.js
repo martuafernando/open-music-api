@@ -1,13 +1,11 @@
-const AlbumPayloadSchema = require('./payloadSchema')
-
-const routes = (handler) => [
+const routes = (handler, payloadSchema) => [
   {
     method: 'POST',
     path: '/albums',
     handler: handler.postAlbum,
     options: {
       validate: {
-        payload: AlbumPayloadSchema,
+        payload: payloadSchema,
         failAction: async (request, h, err) => {
           err.output.payload.status = 'fail'
           throw err
@@ -26,7 +24,7 @@ const routes = (handler) => [
     handler: handler.putAlbumById,
     options: {
       validate: {
-        payload: AlbumPayloadSchema,
+        payload: payloadSchema,
         failAction: async (request, h, err) => {
           err.output.payload.status = 'fail'
           throw err
