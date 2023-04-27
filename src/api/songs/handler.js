@@ -1,12 +1,15 @@
+const autoBind = require('auto-bind')
+
 class SongsHandler {
   constructor (service) {
     this._service = service
 
-    this.postSong = this.postSong.bind(this)
-    this.getSongById = this.getSongById.bind(this)
-    this.getAllSong = this.getAllSong.bind(this)
-    this.putSongById = this.putSongById.bind(this)
-    this.deleteSongById = this.deleteSongById.bind(this)
+    this.postSong = this.postSong()
+    this.getSongById = this.getSongById()
+    this.getAllSong = this.getAllSong()
+    this.putSongById = this.putSongById()
+    this.deleteSongById = this.deleteSongById()
+    autoBind(this)
   }
 
   async postSong (request, h) {

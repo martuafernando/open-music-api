@@ -1,11 +1,15 @@
+const autoBind = require('auto-bind')
+
 class AlbumsHandler {
   constructor (service) {
     this._service = service
 
-    this.postAlbum = this.postAlbum.bind(this)
-    this.getAlbumById = this.getAlbumById.bind(this)
-    this.putAlbumById = this.putAlbumById.bind(this)
-    this.deleteAlbumById = this.deleteAlbumById.bind(this)
+    this.postAlbum = this.postAlbum()
+    this.getAlbumById = this.getAlbumByIdpostAlbum()
+    this.putAlbumById = this.putAlbumByIdpostAlbum()
+    this.deleteAlbumById = this.deleteAlbumByIdpostAlbum()
+
+    autoBind(this)
   }
 
   async postAlbum (request, h) {
