@@ -2,7 +2,7 @@ const routes = (handler, payloadSchema) => [
   {
     method: 'POST',
     path: '/users',
-    handler: handler.postUser,
+    handler: handler.postUsers,
     options: {
       validate: {
         payload: payloadSchema,

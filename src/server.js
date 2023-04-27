@@ -2,13 +2,17 @@ require('dotenv').config()
 
 const Hapi = require('@hapi/hapi')
 const albums = require('./api/albums')
-const AlbumsService = require('./services/AlbumsService')
 const songs = require('./api/songs')
+const users = require('./api/users')
+
+const AlbumsService = require('./services/AlbumsService')
 const SongsService = require('./services/SongsService')
+const UsersService = require('./services/UsersService')
 
 const init = async () => {
   const albumService = new AlbumsService()
   const songService = new SongsService()
+  const userService = new UsersService()
   const server = Hapi.server({
     host: process.env.HOST,
     port: process.env.PORT,
@@ -30,6 +34,13 @@ const init = async () => {
     plugin: songs,
     options: {
       service: songService
+    }
+  })
+
+  await server.register({
+    plugin: users,
+    options: {
+      service: userService
     }
   })
 
