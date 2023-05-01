@@ -65,9 +65,7 @@ class SongsService {
     }
     const result = await this._pool.query(query)
 
-    if (!result.rows.length) {
-      throw new NotFoundError('Song tidak ditemukan')
-    }
+    if (!result.rows.length) throw new NotFoundError('Lagu tidak ditemukan')
 
     return result.rows.map(mapDBToDetailSongsModel)[0]
   }
@@ -81,9 +79,7 @@ class SongsService {
 
     const result = await this._pool.query(query)
 
-    if (!result.rows.length) {
-      throw new NotFoundError('Gagal memperbarui album. Id tidak ditemukan')
-    }
+    if (!result.rows.length) throw new NotFoundError('Gagal memperbarui album. Id tidak ditemukan')
   }
 
   async deleteSongById (id) {
@@ -94,9 +90,7 @@ class SongsService {
 
     const result = await this._pool.query(query)
 
-    if (!result.rows.length) {
-      throw new NotFoundError('Song gagal dihapus. Id tidak ditemukan')
-    }
+    if (!result.rows.length) throw new NotFoundError('Lagu gagal dihapus. Id tidak ditemukan')
   }
 }
 
