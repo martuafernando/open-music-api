@@ -46,6 +46,14 @@ const routes = (handler, { PlaylistPayloadSchema, PlaylistSongPayloadSchema }) =
     }
   },
   {
+    method: 'GET',
+    path: '/playlists/{id}/activities',
+    handler: handler.getPlaylistActivities,
+    options: {
+      auth: 'jwt_authorization'
+    }
+  },
+  {
     method: 'DELETE',
     path: '/playlists/{id}',
     handler: handler.deletePlaylist,
@@ -68,20 +76,6 @@ const routes = (handler, { PlaylistPayloadSchema, PlaylistSongPayloadSchema }) =
       }
     }
   }
-  // {
-  //   method: 'POST',
-  //   path: '/paylists/{id}/songs',
-  //   handler: handler.postPaylistSong,
-  //   options: {
-  //     validate: {
-  //       payload: PlaylistSongPayloadSchema,
-  //       failAction: async (request, h, err) => {
-  //         err.output.payload.status = 'fail'
-  //         throw err
-  //       }
-  //     }
-  //   }
-  // },
 ]
 
 module.exports = routes

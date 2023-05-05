@@ -8,6 +8,7 @@ const songs = require('./api/songs')
 const users = require('./api/users')
 const authentications = require('./api/authentications')
 const playlists = require('./api/playlists')
+const collaborations = require('./api/collaborations')
 
 const tokenManager = require('./tokenize/TokenManager')
 
@@ -16,13 +17,15 @@ const SongsService = require('./services/SongsService')
 const UsersService = require('./services/UsersService')
 const AuthenticationsService = require('./services/AuthenticationsService')
 const PlaylistsService = require('./services/PlaylistsService')
+const CollaborationsService = require('./services/CollaborationsService')
 
 const init = async () => {
   const albumService = new AlbumsService()
   const songService = new SongsService()
-  const userService = new UsersService()
+  const usersService = new UsersService()
   const authenticationService = new AuthenticationsService()
   const playlistsService = new PlaylistsService()
+  const collaborationsService = new CollaborationsService()
 
   const server = Hapi.server({
     host: process.env.HOST,
@@ -72,19 +75,25 @@ const init = async () => {
     {
       plugin: users,
       options: {
-        service: userService
+        service: usersService
       }
     },
     {
       plugin: authentications,
       options: {
-        service: { authenticationsService: authenticationService, userService, tokenManager }
+        service: { authenticationsService: authenticationService, usersService, tokenManager }
       }
     },
     {
       plugin: playlists,
       options: {
-        service: { playlistsService, userService, songService }
+        service: { playlistsService, usersService, songService }
+      }
+    },
+    {
+      plugin: collaborations,
+      options: {
+        service: { usersService, playlistsService, collaborationsService }
       }
     }
   ])
