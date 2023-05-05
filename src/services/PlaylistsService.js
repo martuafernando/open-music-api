@@ -36,7 +36,6 @@ class PlaylistsService {
       values: [owner]
     }
     const result = await this._pool.query(query)
-    console.log(result.rows)
     return result.rows.map(mapDBToPlaylistModel)
   }
 
@@ -111,7 +110,6 @@ class PlaylistsService {
   }
 
   async deleteSongFromPlaylist (playlistId, songId, userId) {
-    console.log(userId)
     const id = nanoid(16)
     const createdAt = new Date().toISOString()
     const queries = [
