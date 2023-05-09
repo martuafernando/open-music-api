@@ -1,5 +1,5 @@
 const Joi = require('@hapi/joi')
-
+const currentYear = new Date().getFullYear()
 const SongPayloadSchema = Joi.object({
   title:
     Joi.string()
@@ -7,6 +7,9 @@ const SongPayloadSchema = Joi.object({
 
   year:
     Joi.number()
+      .integer()
+      .min(1900)
+      .max(currentYear)
       .required(),
 
   genre:

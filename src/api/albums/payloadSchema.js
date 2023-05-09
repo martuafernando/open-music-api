@@ -1,5 +1,7 @@
 const Joi = require('@hapi/joi')
 
+const currentYear = new Date().getFullYear()
+
 const AlbumPayloadSchema = Joi.object({
   name:
     Joi.string()
@@ -7,6 +9,9 @@ const AlbumPayloadSchema = Joi.object({
 
   year:
     Joi.number()
+      .integer()
+      .min(1900)
+      .max(currentYear)
       .required()
 })
 

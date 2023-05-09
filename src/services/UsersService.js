@@ -22,7 +22,7 @@ class UsersService {
     }
     const result = await this._pool.query(query)
 
-    if (!result.rows.length) throw new InvariantError('User gagal ditambahkan')
+    if (!result.rowCount) throw new InvariantError('User gagal ditambahkan')
 
     return id
   }
@@ -45,12 +45,12 @@ class UsersService {
 
     const result = await this._pool.query(query)
 
-    if (!result.rows.length) throw new NotFoundError('User tidak ditemukan')
+    if (!result.rowCount) throw new NotFoundError('User tidak ditemukan')
 
     return result.rows[0]
   }
 
-  async verifyUserCredential ({ username, password }) {
+  async verifyUserCredential (username, password) {
     const query = {
       text: 'SELECT id, password FROM users WHERE username = $1',
       values: [username]
@@ -58,7 +58,7 @@ class UsersService {
 
     const result = await this._pool.query(query)
 
-    if (!result.rows.length) throw new AuthenticationError('Kredensial yang Anda berikan salah')
+    if (!result.rowCount) throw new AuthenticationError('Kredensial yang Anda berikan salah')
 
     const { id, password: hashedPassword } = result.rows[0]
     const match = await bcrypt.compare(password, hashedPassword)

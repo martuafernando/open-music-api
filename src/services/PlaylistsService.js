@@ -106,7 +106,7 @@ class PlaylistsService {
 
     const result = await this._pool.query(query)
 
-    if (!result.rows.length) throw new NotFoundError('Playlist gagal dihapus. Id tidak ditemukan')
+    if (!result.rowCount) throw new NotFoundError('Playlist gagal dihapus. Id tidak ditemukan')
   }
 
   async deleteSongFromPlaylist (playlistId, songId, userId) {
@@ -138,7 +138,7 @@ class PlaylistsService {
     }
 
     const result = await this._pool.query(query)
-    if (!result.rows.length) throw new NotFoundError('Playlist tidak ditemukan')
+    if (!result.rowCount) throw new NotFoundError('Playlist tidak ditemukan')
 
     const playlist = result.rows[0]
     if (playlist.owner !== owner) throw new AuthorizationError('Anda tidak berhak mengakses resource ini')
@@ -153,7 +153,7 @@ class PlaylistsService {
     }
 
     const result = await this._pool.query(query)
-    if (!result.rows.length) throw new NotFoundError('Playlist tidak ditemukan')
+    if (!result.rowCount) throw new NotFoundError('Playlist tidak ditemukan')
 
     const playlist = result.rows[0]
     if (playlist.owner !== owner && playlist.user_id !== owner) throw new AuthorizationError('Anda tidak berhak mengakses resource ini')

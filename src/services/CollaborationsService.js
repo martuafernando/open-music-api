@@ -31,7 +31,7 @@ class CollaborationsService {
 
     const result = await this._pool.query(query)
 
-    if (!result.rows.length) throw new NotFoundError('Collaborations gagal dihapus. Id tidak ditemukan')
+    if (!result.rowCount) throw new NotFoundError('Collaborations gagal dihapus. Id tidak ditemukan')
   }
 }
 

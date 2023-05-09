@@ -2,7 +2,7 @@ const { Pool } = require('pg')
 const { nanoid } = require('nanoid')
 const InvariantError = require('../error/ClientError/InvariantError')
 const NotFoundError = require('../error/ClientError/NotFoundError')
-const { mapDBToSongsModel, mapDBToDetailSongsModel } = require('../utils')
+const { mapDBToDetailSongsModel } = require('../utils')
 
 class SongsService {
   constructor () {
@@ -12,11 +12,10 @@ class SongsService {
   async addSong ({ title, year, genre, performer, duration, albumId }) {
     const id = nanoid(16)
     const createdAt = new Date().toISOString()
-    const updatedAt = createdAt
 
     const query = {
-      text: 'INSERT INTO songs VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id',
-      values: [id, title, year, genre, performer, duration, albumId, createdAt, updatedAt]
+      text: 'INSERT INTO songs VALUES($1, $2, $3, $4, $5, $6, $7, $8, $8) RETURNING id',
+      values: [id, title, year, genre, performer, duration, albumId, createdAt]
     }
 
     const result = await this._pool.query(query)
@@ -30,7 +29,7 @@ class SongsService {
 
   async getAllSong ({ title, performer }) {
     const query = {
-      text: 'SELECT * FROM songs',
+      text: 'SELECT id, title, performer FROM songs',
       values: []
     }
 
@@ -51,11 +50,11 @@ class SongsService {
 
     const result = await this._pool.query(query)
 
-    if (!result.rows.length) {
+    if (!result.rowCount) {
       throw new NotFoundError('Song tidak ditemukan')
     }
 
-    return result.rows.map(mapDBToSongsModel)
+    return result.rows
   }
 
   async getSongById (id) {
@@ -65,7 +64,7 @@ class SongsService {
     }
     const result = await this._pool.query(query)
 
-    if (!result.rows.length) throw new NotFoundError('Lagu tidak ditemukan')
+    if (!result.rowCount) throw new NotFoundError('Lagu tidak ditemukan')
 
     return result.rows.map(mapDBToDetailSongsModel)[0]
   }
@@ -79,7 +78,7 @@ class SongsService {
 
     const result = await this._pool.query(query)
 
-    if (!result.rows.length) throw new NotFoundError('Gagal memperbarui album. Id tidak ditemukan')
+    if (!result.rowCount) throw new NotFoundError('Gagal memperbarui album. Id tidak ditemukan')
   }
 
   async deleteSongById (id) {
@@ -90,7 +89,7 @@ class SongsService {
 
     const result = await this._pool.query(query)
 
-    if (!result.rows.length) throw new NotFoundError('Lagu gagal dihapus. Id tidak ditemukan')
+    if (!result.rowCount) throw new NotFoundError('Lagu gagal dihapus. Id tidak ditemukan')
   }
 }
 
