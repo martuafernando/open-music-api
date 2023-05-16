@@ -39,6 +39,21 @@ class PlaylistsService {
     return result.rows.map(mapDBToPlaylistModel)
   }
 
+  async isPlaylistOwner (playlistId, userId) {
+    const query = {
+      text: `SELECT * FROM playlists
+            WHERE playlists.id = $1`,
+      values: [playlistId]
+    }
+
+    const result = await this._pool.query(query)
+    if (!result.rowCount) throw new NotFoundError('Playlist tidak ditemukan')
+
+    const playlist = result.rows[0]
+    if (playlist.owner === userId) return true
+    return false
+  }
+
   async getPlaylistById (playlistId) {
     const query = {
       text: `SELECT * FROM playlists

@@ -9,6 +9,7 @@ const users = require('./api/users')
 const authentications = require('./api/authentications')
 const playlists = require('./api/playlists')
 const collaborations = require('./api/collaborations')
+const _exports = require('./api/exports')
 
 const tokenManager = require('./tokenize/TokenManager')
 
@@ -18,6 +19,7 @@ const UsersService = require('./services/UsersService')
 const AuthenticationsService = require('./services/AuthenticationsService')
 const PlaylistsService = require('./services/PlaylistsService')
 const CollaborationsService = require('./services/CollaborationsService')
+const producerService = require('./services/ProducerService.js')
 
 const init = async () => {
   const albumService = new AlbumsService()
@@ -94,6 +96,12 @@ const init = async () => {
       plugin: collaborations,
       options: {
         service: { usersService, playlistsService, collaborationsService }
+      }
+    },
+    {
+      plugin: _exports,
+      options: {
+        service: { producerService, playlistsService }
       }
     }
   ])
