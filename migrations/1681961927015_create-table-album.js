@@ -14,6 +14,10 @@ exports.up = pgm => {
       type: 'VARCHAR(4)',
       notNull: true
     },
+    coverUrl: {
+      type: 'TEXT',
+      defaultTo: ''
+    },
     created_at: {
       type: 'TEXT',
       notNull: true

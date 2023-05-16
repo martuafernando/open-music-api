@@ -21,6 +21,7 @@
   "homepage": "https://github.com/martuafernando/open-music-api#readme",
   "dependencies": {
     "@hapi/hapi": "^21.3.1",
+    "@hapi/inert": "^7.1.0",
     "@hapi/joi": "^17.1.1",
     "@hapi/jwt": "^3.2.0",
     "amqplib": "^0.10.3",

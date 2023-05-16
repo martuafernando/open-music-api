@@ -1,7 +1,9 @@
 require('dotenv').config()
 
+const path = require('path')
 const Hapi = require('@hapi/hapi')
 const Jwt = require('@hapi/jwt')
+const Inert = require('@hapi/inert')
 
 const albums = require('./api/albums')
 const songs = require('./api/songs')
@@ -10,6 +12,7 @@ const authentications = require('./api/authentications')
 const playlists = require('./api/playlists')
 const collaborations = require('./api/collaborations')
 const _exports = require('./api/exports')
+const uploads = require('./api/uploads')
 
 const tokenManager = require('./tokenize/TokenManager')
 
@@ -20,6 +23,7 @@ const AuthenticationsService = require('./services/AuthenticationsService')
 const PlaylistsService = require('./services/PlaylistsService')
 const CollaborationsService = require('./services/CollaborationsService')
 const producerService = require('./services/ProducerService.js')
+const StorageService = require('./services/StorageService')
 
 const init = async () => {
   const albumService = new AlbumsService()
@@ -28,6 +32,7 @@ const init = async () => {
   const authenticationService = new AuthenticationsService()
   const playlistsService = new PlaylistsService()
   const collaborationsService = new CollaborationsService()
+  const storageService = new StorageService(path.resolve(__dirname, 'api/uploads/file/images'))
 
   const server = Hapi.server({
     host: process.env.HOST,
@@ -42,6 +47,9 @@ const init = async () => {
   await server.register([
     {
       plugin: Jwt
+    },
+    {
+      plugin: Inert
     }
   ])
 
@@ -102,6 +110,12 @@ const init = async () => {
       plugin: _exports,
       options: {
         service: { producerService, playlistsService }
+      }
+    },
+    {
+      plugin: uploads,
+      options: {
+        service: { storageService, albumService }
       }
     }
   ])
