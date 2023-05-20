@@ -13,7 +13,7 @@ class UploadsHandler {
     const oldFilename = await this._albumService.getProperty(id, 'coverUrl')
     await this._storageService.deleteFile(oldFilename)
     const filename = await this._storageService.writeFile(cover, cover.hapi)
-    const updatedAlbums = await this._albumService.upsertCover(id, filename)
+    await this._albumService.upsertCover(id, filename)
 
     const response = h.response({
       status: 'success',

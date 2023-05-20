@@ -13,6 +13,7 @@ const playlists = require('./api/playlists')
 const collaborations = require('./api/collaborations')
 const _exports = require('./api/exports')
 const uploads = require('./api/uploads')
+const albumLikes = require('./api/albumLikes')
 
 const tokenManager = require('./tokenize/TokenManager')
 
@@ -24,6 +25,8 @@ const PlaylistsService = require('./services/PlaylistsService')
 const CollaborationsService = require('./services/CollaborationsService')
 const producerService = require('./services/ProducerService.js')
 const StorageService = require('./services/StorageService')
+const LikeAlbumsService = require('./services/LikesAlbumService')
+const CacheService = require('./services/CacheService')
 
 const init = async () => {
   const albumService = new AlbumsService()
@@ -33,6 +36,8 @@ const init = async () => {
   const playlistsService = new PlaylistsService()
   const collaborationsService = new CollaborationsService()
   const storageService = new StorageService(path.resolve(__dirname, 'api/uploads/file/images'))
+  const likeAlbumsService = new LikeAlbumsService()
+  const cacheService = new CacheService();
 
   const server = Hapi.server({
     host: process.env.HOST,
@@ -116,6 +121,12 @@ const init = async () => {
       plugin: uploads,
       options: {
         service: { storageService, albumService }
+      }
+    },
+    {
+      plugin: albumLikes,
+      options: {
+        service: { albumService, likeAlbumsService, cacheService }
       }
     }
   ])
