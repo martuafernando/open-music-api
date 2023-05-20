@@ -1,13 +1,16 @@
 const autoBind = require('auto-bind')
 
 class AlbumsHandler {
-  constructor (service) {
-    this._service = service
+  constructor ({ albumsService, cacheService }) {
+    this._albumsService = albumsService
+    this._cacheService = cacheService
+    console.log(this._albumsService)
+    console.log(this._cacheService)
     autoBind(this)
   }
 
   async postAlbum (request, h) {
-    const albumId = await this._service.addAlbum(request.payload)
+    const albumId = await this._albumsService.addAlbum(request.payload)
 
     return h
       .response({
@@ -22,11 +25,19 @@ class AlbumsHandler {
 
   async getAlbumById (request, h) {
     const { id } = request.params
-    const album = await this._service.getAlbumById(id)
-    return {
-      status: 'success',
-      data: {
-        album
+
+    try {
+      const result = await this._cacheService.get(`albumId:${id}`)
+      return result.header('X-Data-Source', 'cache')
+    } catch {
+      const album = await this._albumsService.getAlbumById(id)
+      await this._cacheService.set(`albumId:${id}`, JSON.stringify({
+        status: 'success',
+        data: { album }
+      }))
+      return {
+        status: 'success',
+        data: { album }
       }
     }
   }
@@ -34,8 +45,8 @@ class AlbumsHandler {
   async putAlbumById (request, h) {
     const { id } = request.params
 
-    await this._service.editAlbumById(id, request.payload)
-
+    await this._albumsService.editAlbumById(id, request.payload)
+    await this._cacheService.delete(`albumId:${id}`)
     return {
       status: 'success',
       message: 'Album berhasil diperbarui'
@@ -44,8 +55,8 @@ class AlbumsHandler {
 
   async deleteAlbumById (request, h) {
     const { id } = request.params
-    await this._service.deleteAlbumById(id)
-
+    await this._albumsService.deleteAlbumById(id)
+    await this._cacheService.delete(`albumId:${id}`)
     return {
       status: 'success',
       message: 'Album berhasil dihapus'

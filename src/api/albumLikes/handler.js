@@ -2,9 +2,9 @@ const autoBind = require('auto-bind')
 const ClientError = require('../../error/ClientError/ClientError')
 
 class UploadsHandler {
-  constructor ({ albumService, likeAlbumsService, cacheService }) {
+  constructor ({ albumsService, likeAlbumsService, cacheService }) {
     this._likeAlbumsService = likeAlbumsService
-    this._albumService = albumService
+    this._albumsService = albumsService
     this._cacheService = cacheService
     autoBind(this)
   }
@@ -13,7 +13,7 @@ class UploadsHandler {
     const { id: credentialId } = request.auth.credentials
     const { id: albumId } = request.params
 
-    await this._albumService.getAlbumById(albumId)
+    await this._albumsService.getAlbumById(albumId)
     const isLiked = await this._likeAlbumsService.isUserAlreadyLikeAlbum(albumId, credentialId)
     if (isLiked) throw new ClientError('Sudah disukai')
 
@@ -58,7 +58,7 @@ class UploadsHandler {
     const { id: credentialId } = request.auth.credentials
     const { id: albumId } = request.params
 
-    await this._albumService.getAlbumById(albumId)
+    await this._albumsService.getAlbumById(albumId)
     const isLiked = await this._likeAlbumsService.isUserAlreadyLikeAlbum(albumId, credentialId)
     if (!isLiked) throw new ClientError('Belum menyukai album ini')
 

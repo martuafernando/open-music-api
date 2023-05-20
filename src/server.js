@@ -29,7 +29,7 @@ const LikeAlbumsService = require('./services/LikesAlbumService')
 const CacheService = require('./services/CacheService')
 
 const init = async () => {
-  const albumService = new AlbumsService()
+  const albumsService = new AlbumsService()
   const songService = new SongsService()
   const usersService = new UsersService()
   const authenticationService = new AuthenticationsService()
@@ -78,7 +78,7 @@ const init = async () => {
     {
       plugin: albums,
       options: {
-        service: albumService
+        service: { albumsService, cacheService }
       }
     },
     {
@@ -120,13 +120,13 @@ const init = async () => {
     {
       plugin: uploads,
       options: {
-        service: { storageService, albumService }
+        service: { storageService, albumsService }
       }
     },
     {
       plugin: albumLikes,
       options: {
-        service: { albumService, likeAlbumsService, cacheService }
+        service: { albumsService, likeAlbumsService, cacheService }
       }
     }
   ])
