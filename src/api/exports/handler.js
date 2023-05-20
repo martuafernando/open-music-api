@@ -15,7 +15,7 @@ class ExportsHandler {
     if (!isOwner) throw new AuthorizationError('Tidak berhak mengakses playlists')
 
     const message = {
-      userId: request.auth.credentials.id,
+      playlistId,
       targetEmail: request.payload.targetEmail
     }
 
