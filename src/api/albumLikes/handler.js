@@ -2,10 +2,9 @@ const autoBind = require('auto-bind')
 const ClientError = require('../../error/ClientError/ClientError')
 
 class UploadsHandler {
-  constructor ({ albumsService, likeAlbumsService, cacheService }) {
+  constructor ({ albumsService, likeAlbumsService }) {
     this._likeAlbumsService = likeAlbumsService
     this._albumsService = albumsService
-    this._cacheService = cacheService
     autoBind(this)
   }
 
@@ -24,34 +23,19 @@ class UploadsHandler {
       message: 'Berhasil menyukai album'
     })
     response.code(201)
-
-    await this._cacheService.delete(`albumLike:${albumId}`)
     return response
   }
 
   async getLikeAlbum (request, h) {
     const { id: albumId } = request.params
 
-    try {
-      const result = await this._cacheService.get(`albumLike:${albumId}`)
-      console.log('testing', await this._cacheService.get(`albumLike:${albumId}`))
-      const response = h
-        .response(JSON.parse(result))
-      console.log(result)
-      return response.header('X-Data-Source', 'cache')
-    } catch {
-      const likes = Number(await this._likeAlbumsService.readlikeAlbum(albumId))
-      const response = h.response({
-        status: 'success',
-        data: { likes }
-      })
-      response.code(200)
-      await this._cacheService.set(`albumLike:${albumId}`, JSON.stringify({
-        status: 'success',
-        data: { likes }
-      }))
-      return response
-    }
+    const { cache, likeCount } = await this._likeAlbumsService.readlikeAlbum(albumId)
+    const response = h.response({
+      status: 'success',
+      data: { likes: Number(likeCount) }
+    })
+    response.code(200)
+    return cache ? response.header('X-Data-Source', 'cache') : response
   }
 
   async deleteLikeAlbum (request, h) {
@@ -69,7 +53,6 @@ class UploadsHandler {
     })
     response.code(200)
 
-    await this._cacheService.delete(`albumLike:${albumId}`)
     return response
   }
 }
